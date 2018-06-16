@@ -67,7 +67,73 @@ class PokerPlayerAPI(Resource):
     #         bid  : a number between 0 and max_bid
     def __get_bid(self, data):
         
-        return 0
+        min_bid = data['min_bid']
+        big_blind = data['big_blind']
+        highCards = ['A', 'K', 'Q', 'J',]
+        hand = data['hand']
+        board= data['board']
+        print "board Value: ", board
+        print "hand Value: ", hand
+        print "big_blind Value: ", big_blind
+        print "min_bid Value: ", min_bid
+        print "Length of the board: ", len(board)
+        bid = min_bid
+        if len(board)==0: 
+            if hand[0][0] in highCards or hand[1][1] in highCards:
+                bid = min_bid + big_blind +100
+            else:
+                bid = min_bid+50
+
+        if len(board)==3:
+            cards = hand + board
+
+            for x in cards:
+                if x[0] in highCards:
+                    bid = bid + big_blind + 10
+            
+            if hand[0][0] in highCards or hand[1][1] in highCards:
+                bid = min_bid + big_blind + 50
+                i = 0
+            for x in board:
+                if x[0] in highCards:
+                    bid = min_bid + big_blind + 50
+            else:
+                bid = min_bid
+            
+            if self.threeOfKind(cards) == 1:
+                bid = bid + 150
+        print " our bid: ", bid
+        
+        return bid  
+
+    def threeOfKind(self, cards):
+        
+        for x in cards:
+            cc.append(x[0])
+        c = Counter(cc)
+        listU = c.values()
+        three = 3
+        if three in listU:
+            return 1
+        else:
+            return 0
+            
+    def straight(self, cards):
+        
+        for x in cards:
+            cc.append(x[0])
+
+        d = {
+            "1" : 
+        }
+
+        c = Counter(cc)
+        listU = c.values()
+        three = 3
+        if three in listU:
+            return 1
+        else:
+            return 0
     
     # -------------------------------------------------------------- do not change behind this line
     # dispatch incoming get commands
